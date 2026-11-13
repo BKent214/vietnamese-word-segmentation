@@ -1,0 +1,55 @@
+
+# Python cache
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Virtual environments
+venv/
+.venv/
+env/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# IDE
+.vscode/
+.idea/
+
+# Environment variables and secrets
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+logs/
+
+# Machine Learning checkpoints
+*.pt
+*.pth
+*.ckpt
+*.h5
+*.keras
+
+# Large data files
+data/raw/*
+!data/raw/README.md
+
+data/processed/*
+!data/processed/README.md
+
+# Custom test data - keep documentation
+data/custom_test/*
+!data/custom_test/README.md
+
+# Generated outputs
+results/*
+!results/README.md
+!results/figures/
+results/figures/*
+!results/figures/.gitkeep
+
+# OS files
+.DS_Store
+Thumbs.db
