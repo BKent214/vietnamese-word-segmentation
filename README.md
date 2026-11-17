@@ -138,17 +138,18 @@ Dự án được triển khai theo quy trình:
 
 ### 4.1. Dataset
 
-Nguồn dữ liệu dự kiến: Vietnamese Word Segmentation Corpus – VLSP 2013.
+Bộ dữ liệu chính thức được nhóm lựa chọn: **Universal Dependencies Vietnamese Treebank (UD Vietnamese-VTB)**.
+Kho lưu trữ: [UD_Vietnamese-VTB (GitHub)](https://github.com/UniversalDependencies/UD_Vietnamese-VTB)
 
-Nhóm sẽ kiểm tra quyền truy cập, điều kiện sử dụng và quy định phân phối dữ liệu trước khi sử dụng.
+Dữ liệu có nguồn gốc từ Vietnamese Treebank (VTB) của dự án VLSP, bao gồm các bài báo chí và đã được chuẩn hóa theo chuẩn quốc tế CoNLL-U. Dữ liệu được chia sẵn thành 3 tập train, dev và test.
 
-Thông tin cần thống kê:
-- Số lượng câu.
-- Số lượng âm tiết.
-- Số lượng từ.
-- Kích thước từ vựng.
-- Tỷ lệ OOV.
-- Phân bố độ dài câu và độ dài từ.
+**Thống kê quy mô ngữ liệu:**
+- **Train (`vi_vtb-ud-train.conllu`)**: 1.400 câu – 20.215 token từ – 24.973 đơn vị đầu vào – 21.345 âm tiết ước tính.
+- **Dev (`vi_vtb-ud-dev.conllu`)**: 1.123 câu – 26.162 token từ – 31.927 đơn vị đầu vào – 27.390 âm tiết ước tính.
+- **Test (`vi_vtb-ud-test.conllu`)**: 800 câu – 11.692 token từ – 13.857 đơn vị đầu vào – 11.839 âm tiết ước tính.
+- **Tổng cộng**: 3.323 câu, 58.069 token từ, 70.757 đơn vị đầu vào, 60.574 âm tiết ước tính.
+
+Toàn bộ dữ liệu gốc được lưu giữ nguyên trạng tại `data/raw/ud_vtb/`. Chi tiết cấu trúc dữ liệu và hướng dẫn sử dụng xem tại [docs/methodology/dataset.md](docs/methodology/dataset.md) và [data/raw/README.md](data/raw/README.md).
 
 ### 4.2. Data Preprocessing
 
@@ -249,16 +250,16 @@ Dự án được thực hiện bởi nhóm 10 thành viên.
 
 | Member | Responsibility |
 |---|---|
-| TV01 | Problem Overview & Research Objectives |
-| TV02 | Hybrid Approach & Literature Review |
-| TV03 | Dataset Collection |
-| TV04 | EDA, Preprocessing & BIO Annotation |
-| TV05 | Hybrid Model Implementation |
-| TV06 | LSTM Model Implementation |
-| TV07 | Evaluation & Error Analysis |
-| TV08 | RNN/LSTM Theoretical Foundation |
-| TV09 | Slides & Content Integration |
-| TV10 | Presentation Script & Demo |
+| TV01 (Tâm) | Problem Overview & Research Objectives |
+| TV02 (Dương) | Hybrid Approach & Literature Review |
+| TV03 (Hải) | Dataset Collection & Documentation |
+| TV04 (Phát) | EDA, Preprocessing & BIO Annotation |
+| TV05 (Thành) | Hybrid Model Implementation |
+| TV06 (Khang) | LSTM Model Implementation |
+| TV07 (Phương) | Evaluation & Error Analysis |
+| TV08 (Hoàng) | RNN/LSTM Theoretical Foundation |
+| TV09 (My) | Slides & Content Integration |
+| TV10 (Phúc) | Presentation Script & Demo |
 
 Chi tiết nhiệm vụ, sản phẩm bàn giao và deadline được trình bày trong `docs/project_plan.md`.
 

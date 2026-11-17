@@ -35,6 +35,8 @@ logs/
 # Large data files
 data/raw/*
 !data/raw/README.md
+!data/raw/ud_vtb/
+!data/raw/ud_vtb/**
 
 data/processed/*
 !data/processed/README.md
