@@ -12,7 +12,7 @@ def read_conllu(path):
         for line in f:
             line = line.strip()
             if line.startswith("#"):      # dòng chú thích: sent_id, text
-                continu
+                continue
             if line == "":                # dòng trống = hết một câu
                 if words:
                     sentences.append(words)
