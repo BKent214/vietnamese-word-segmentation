@@ -40,6 +40,7 @@ data/raw/*
 
 data/processed/*
 !data/processed/README.md
+!data/processed/*.csv
 
 # Custom test data - keep documentation
 data/custom_test/*
