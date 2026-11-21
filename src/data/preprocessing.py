@@ -11,6 +11,7 @@ def read_conllu(path):
     with open(path, encoding="utf-8") as f:
         for line in f:
             line = line.strip()
+
             if line.startswith("#"):      # dòng chú thích: sent_id, text
                 continue
             if line == "":                # dòng trống = hết một câu

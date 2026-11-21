@@ -4,6 +4,9 @@ Chuyển đổi giữa danh sách từ, nhãn B/I và dòng văn bản đã tác
     I: âm tiết nằm bên trong từ đang xét
 """
 def words_to_labels(words):
+    """
+    ["Hiện nay", "xã"]  ->  (["Hiện", "nay", "xã"], ["B", "I", "B"])
+    """
     syllables = []
     labels = []
     for word in words:
