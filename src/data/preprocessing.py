@@ -1,3 +1,4 @@
+"Đọc dữ liệu CoNLL-U và chuẩn hóa văn bản."
 import unicodedata
 
 def read_conllu(path):
