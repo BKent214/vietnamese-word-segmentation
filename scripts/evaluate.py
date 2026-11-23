@@ -14,7 +14,15 @@ if str(REPOSITORY_ROOT) not in sys.path:
 import matplotlib.pyplot as plt
 import pandas as pd
 
-from src.baseline.segmenter import RegexSegmenter, WhitespaceSegmenter
+from src.baseline.segmenter import (
+    BaseSegmenter,
+    BigramSegmenter,
+    MaximumMatchingSegmenter,
+    RegexSegmenter,
+    WhitespaceSegmenter,
+    build_bigram_model,
+    build_word_dictionary,
+)
 from src.evaluation.error_analysis import build_error_rows
 from src.evaluation.metrics import (
     oov_recall,
@@ -23,6 +31,17 @@ from src.evaluation.metrics import (
 )
 from src.lstm.config import LSTMConfig
 from src.lstm.predict import WordSegmenterPredictor
+
+
+def build_baseline_models(training_segments: list[str]) -> dict[str, BaseSegmenter]:
+    dictionary = build_word_dictionary(training_segments)
+    bigram_model = build_bigram_model(training_segments)
+    return {
+        "whitespace": WhitespaceSegmenter(),
+        "regex": RegexSegmenter(),
+        "maximum_matching": MaximumMatchingSegmenter(dictionary),
+        "bigram": BigramSegmenter(dictionary, bigram_model),
+    }
 
 
 def calculate_metrics(
@@ -64,7 +83,10 @@ def calculate_metrics(
     }
 
 
-def predict_dataset(model, test_df: pd.DataFrame) -> tuple[pd.DataFrame, float]:
+def predict_dataset(
+    model: BaseSegmenter | WordSegmenterPredictor,
+    test_df: pd.DataFrame,
+) -> tuple[pd.DataFrame, float]:
     predicted_segments = []
     predicted_labels = []
     started = time.perf_counter()
@@ -127,10 +149,10 @@ def main() -> None:
     output_dir.mkdir(parents=True, exist_ok=True)
     (output_dir / "figures").mkdir(parents=True, exist_ok=True)
 
-    models = {
-        "whitespace": WhitespaceSegmenter(),
-        "regex": RegexSegmenter(),
-    }
+    training_segments = train_df["segmented"].astype(str).tolist()
+    models: dict[str, BaseSegmenter | WordSegmenterPredictor] = dict(
+        build_baseline_models(training_segments)
+    )
     if config.best_model_path.is_file() and config.vocab_path.is_file():
         models["lstm"] = WordSegmenterPredictor(
             config.best_model_path,
@@ -146,7 +168,6 @@ def main() -> None:
     all_metrics: dict[str, dict[str, float]] = {}
     prediction_tables = []
     error_rows = []
-    training_segments = train_df["segmented"].astype(str).tolist()
     for model_name, model in models.items():
         predictions, elapsed = predict_dataset(model, test_df)
         model_metrics = calculate_metrics(test_df, predictions, training_segments)

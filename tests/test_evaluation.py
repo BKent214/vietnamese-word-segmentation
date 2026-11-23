@@ -1,8 +1,9 @@
 import pandas as pd
 
+from src.baseline.segmenter import BigramSegmenter, MaximumMatchingSegmenter
 from src.evaluation.error_analysis import build_error_rows
 from src.evaluation.metrics import oov_recall, word_prf
-from scripts.evaluate import calculate_metrics
+from scripts.evaluate import build_baseline_models, calculate_metrics
 
 
 def test_word_metrics_do_not_match_words_across_sentences():
@@ -22,6 +23,27 @@ def test_oov_recall_counts_matching_occurrences_within_each_sentence():
         predicted_sentences,
         training_words=["known"],
     ) == 2 / 3
+
+
+def test_maximum_matching_and_bigram_are_built_from_training_segments():
+    training_segments = ["a_b c", "d_e"]
+
+    models = build_baseline_models(training_segments)
+
+    assert set(models) == {
+        "whitespace",
+        "regex",
+        "maximum_matching",
+        "bigram",
+    }
+    maximum_matching = models["maximum_matching"]
+    bigram = models["bigram"]
+    assert isinstance(maximum_matching, MaximumMatchingSegmenter)
+    assert isinstance(bigram, BigramSegmenter)
+    assert maximum_matching.dictionary == {"a_b", "c", "d_e"}
+    assert bigram.dictionary == {"a_b", "c", "d_e"}
+    assert bigram.lm.bigram_counts[("<s>", "a_b")] == 1
+    assert bigram.lm.bigram_counts[("<s>", "not_in_train")] == 0
 
 
 def test_calculate_metrics_compares_words_within_each_sentence():

@@ -5,7 +5,7 @@
     "word_recall": 0.8221861101607937,
     "word_f1": 0.752514775529375,
     "oov_recall": 0.4585002862049227,
-    "inference_time_seconds": 0.0035812000023724977
+    "inference_time_seconds": 0.004063600001245504
   },
   "regex": {
     "accuracy": 0.8461427437396262,
@@ -13,7 +13,23 @@
     "word_recall": 0.8236400957919945,
     "word_f1": 0.7548205047813136,
     "oov_recall": 0.4682312535775615,
-    "inference_time_seconds": 0.02273300000160816
+    "inference_time_seconds": 0.01878240000223741
+  },
+  "maximum_matching": {
+    "accuracy": 0.9233600346395323,
+    "word_precision": 0.8414981036662452,
+    "word_recall": 0.9108792336640438,
+    "word_f1": 0.8748151798915721,
+    "oov_recall": 0.4579278763594734,
+    "inference_time_seconds": 0.03493530000196188
+  },
+  "bigram": {
+    "accuracy": 0.9238651944865411,
+    "word_precision": 0.8420886325934118,
+    "word_recall": 0.911734519329456,
+    "word_f1": 0.8755287257196831,
+    "oov_recall": 0.4579278763594734,
+    "inference_time_seconds": 0.07244809999974677
   },
   "lstm": {
     "accuracy": 0.9248755141805586,
@@ -21,6 +37,6 @@
     "word_recall": 0.8802600068422853,
     "word_f1": 0.8766236531663899,
     "oov_recall": 0.6336576989124213,
-    "inference_time_seconds": 2.2043584999992163
+    "inference_time_seconds": 1.9177994999990915
   }
 }

@@ -5,8 +5,10 @@ Run `python scripts/evaluate.py` from the repository root to regenerate:
 - `error_analysis.csv`: sentence-level gold/prediction differences.
 - `figures/model_comparison.png`: score comparison chart.
 
-The script evaluates the whitespace and regex baselines. It includes the LSTM
-only when both `checkpoints/lstm/best_lstm_model.pt` and
+The script evaluates whitespace, regex, maximum matching and bigram
+baselines. The maximum-matching dictionary and bigram model are built from
+`train.csv` only. It includes the LSTM only when both
+`checkpoints/lstm/best_lstm_model.pt` and
 `checkpoints/lstm/vocab.json` are present. Those files are produced by the
 separate LSTM training workflow. `predictions.csv` is also generated locally
 for inspection but is not tracked because it duplicates the test corpus.
