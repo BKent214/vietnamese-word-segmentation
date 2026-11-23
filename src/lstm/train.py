@@ -72,7 +72,7 @@ def run_epoch(
                 optimizer.step()
 
             n_tokens = int(mask.sum().item())
-            total_loss += loss.item()
+            total_loss += loss.item() * n_tokens
             total_tokens += n_tokens
 
             # Thu thập dự đoán tại các vị trí không phải <PAD>
@@ -92,7 +92,7 @@ def run_epoch(
 
 def plot_training_history(history: Dict[str, List[float]], save_path) -> None:
     epochs = range(1, len(history["train_loss"]) + 1)
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 4.5))
+    _, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 4.5))
 
     ax1.plot(epochs, history["train_loss"], label="Train Loss", marker="o")
     ax1.plot(epochs, history["dev_loss"],   label="Dev Loss",   marker="s")
@@ -102,8 +102,8 @@ def plot_training_history(history: Dict[str, List[float]], save_path) -> None:
     ax1.legend()
     ax1.grid(True, linestyle="--", alpha=0.5)
 
-    ax2.plot(epochs, history["train_f1"], label="Train Token F1", marker="o")
-    ax2.plot(epochs, history["dev_f1"],   label="Dev Token F1",   marker="s", color="green")
+    ax2.plot(epochs, history["train_f1"], label="Train Boundary F1 (B)", marker="o")
+    ax2.plot(epochs, history["dev_f1"],   label="Dev Boundary F1 (B)",   marker="s", color="green")
     ax2.set_title("Boundary F1 (B label) qua các Epoch")
     ax2.set_xlabel("Epoch")
     ax2.set_ylabel("F1-Score")

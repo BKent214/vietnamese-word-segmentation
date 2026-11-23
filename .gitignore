@@ -52,6 +52,10 @@ results/*
 !results/figures/
 results/figures/*
 !results/figures/.gitkeep
+!results/metrics.json
+!results/metrics.csv
+!results/error_analysis.csv
+!results/figures/model_comparison.png
 
 # OS files
 .DS_Store

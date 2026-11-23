@@ -1,72 +1,57 @@
-"""
-Tạo dữ liệu đã xử lý từ data/raw/ud_vtb/ và lưu vào data/processed/.
-Thực hiện: Phát (TV04)
+"""Convert the raw UD Vietnamese-VTB splits to the project's processed CSV format.
 
-Chạy từ thư mục gốc của repo:
+Run from the repository root:
     python scripts/prepare_data.py
-
-Kết quả: train.csv, dev.csv, test.csv. Mỗi dòng là một câu, gồm 4 cột:
-    id         : số thứ tự câu
-    text       : câu chưa tách từ      Hiện nay xã có 68 tổ nhân dân .
-    segmented  : câu đã tách từ        Hiện_nay xã có 68 tổ nhân_dân .
-    labels     : nhãn B/I từng âm tiết B I B B B B B I B
-
-Cột text và labels có cùng số phần tử khi tách theo khoảng trắng.
 """
 
 import csv
-import os
 import sys
+from pathlib import Path
 
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
+if str(REPOSITORY_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPOSITORY_ROOT))
 
+from src.data.annotation import labels_to_words, to_segmented_line, words_to_labels
 from src.data.preprocessing import read_conllu
-from src.data.annotation import words_to_labels, labels_to_words, to_segmented_line
 
-RAW_DIR = "data/raw/ud_vtb"
-OUT_DIR = "data/processed"
-SPLITS = ["train", "dev", "test"]
+RAW_DIR = REPOSITORY_ROOT / "data" / "raw" / "ud_vtb"
+OUT_DIR = REPOSITORY_ROOT / "data" / "processed"
+SPLITS = ("train", "dev", "test")
 
 
-def main():
-    os.makedirs(OUT_DIR, exist_ok=True)
+def main() -> None:
+    OUT_DIR.mkdir(parents=True, exist_ok=True)
 
-Cột text và labels có cùng số phần tử khi tách theo khoảng trắng.
-"""
-import csv
-import os
-import sys
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from src.data.preprocessing import read_conllu
-from src.data.annotation import words_to_labels, labels_to_words, to_segmented_line
-RAW_DIR = "data/raw/ud_vtb"
-OUT_DIR = "data/processed"
-SPLITS = ["train", "dev", "test"]
-def main():
-    os.makedirs(OUT_DIR, exist_ok=True)
     for split in SPLITS:
-        sentences = read_conllu(f"{RAW_DIR}/vi_vtb-ud-{split}.conllu")
+        source_path = RAW_DIR / f"vi_vtb-ud-{split}.conllu"
+        sentences = read_conllu(source_path)
         errors = 0
+        output_path = OUT_DIR / f"{split}.csv"
 
-        # utf-8-sig để Excel hiển thị đúng tiếng Việt có dấu
-        with open(f"{OUT_DIR}/{split}.csv", "w", encoding="utf-8-sig", newline="") as f:
-            writer = csv.writer(f)
+        with output_path.open("w", encoding="utf-8-sig", newline="") as output_file:
+            writer = csv.writer(output_file)
             writer.writerow(["id", "text", "segmented", "labels"])
 
-            for i, words in enumerate(sentences, start=1):
+            for sentence_id, words in enumerate(sentences, start=1):
                 syllables, labels = words_to_labels(words)
-
-                # Kiểm tra hai chiều: ghép nhãn lại phải ra đúng câu gốc
                 if labels_to_words(syllables, labels) != words:
                     errors += 1
 
-                writer.writerow([i, " ".join(syllables), to_segmented_line(words), " ".join(labels)])
+                writer.writerow(
+                    [
+                        sentence_id,
+                        " ".join(syllables),
+                        to_segmented_line(words),
+                        " ".join(labels),
+                    ]
+                )
 
-        print(f"{split:5s}: {len(sentences)} câu -> {OUT_DIR}/{split}.csv, lỗi chuyển đổi: {errors}")
+        print(
+            f"{split:5s}: {len(sentences)} câu -> {output_path}, "
+            f"lỗi chuyển đổi: {errors}"
+        )
 
-
-                writer.writerow([i, " ".join(syllables), to_segmented_line(words), " ".join(labels)])
-        print(f"{split:5s}: {len(sentences)} câu -> {OUT_DIR}/{split}.csv, lỗi chuyển đổi: {errors}")
 
 if __name__ == "__main__":
     main()
